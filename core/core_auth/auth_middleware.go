@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const HEADER_PREFIX = "Bearer "
+const header_prefix = "Bearer "
 
 func AuthMiddleware(config *AuthConfig) gin.HandlerFunc {
 	return func(context *gin.Context) {
@@ -52,7 +52,7 @@ func AuthMiddleware(config *AuthConfig) gin.HandlerFunc {
 
 		// 获取令牌
 		headerString := context.Request.Header.Get("Authorization")
-		tokenString, preFound := strings.CutPrefix(headerString, HEADER_PREFIX)
+		tokenString, preFound := strings.CutPrefix(headerString, header_prefix)
 		tokenString = strings.TrimSpace(tokenString)
 
 		if !preFound || len(tokenString) == 0 {
