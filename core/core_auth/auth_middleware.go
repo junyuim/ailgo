@@ -52,7 +52,7 @@ func AuthMiddleware(config *AuthConfig) gin.HandlerFunc {
 
 		// 获取令牌
 		headerString := context.Request.Header.Get("Authorization")
-		tokenString, preFound := strings.CutPrefix(HEADER_PREFIX, headerString)
+		tokenString, preFound := strings.CutPrefix(headerString, HEADER_PREFIX)
 		tokenString = strings.TrimSpace(tokenString)
 
 		if !preFound || len(tokenString) == 0 {
