@@ -11,13 +11,13 @@ type IDbConnection interface {
 
 	DriverName() string
 
-	Get(dest interface{}, query string, args ...interface{}) error
+	Get(dest any, query string, args ...any) error
 
-	Select(dest interface{}, query string, args ...interface{}) error
+	Select(dest any, query string, args ...any) error
 
-	NamedQuery(query string, arg interface{}) (*sqlx.Rows, error)
+	NamedQuery(query string, arg any) (*sqlx.Rows, error)
 
-	NamedExec(query string, arg interface{}) (sql.Result, error)
+	NamedExec(query string, arg any) (sql.Result, error)
 }
 
 //
