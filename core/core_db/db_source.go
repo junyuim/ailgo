@@ -1,6 +1,8 @@
 package core_db
 
 import (
+	"context"
+	"database/sql"
 	"github.com/jmoiron/sqlx"
 	"github.com/junyuim/ailgo/core/core_utils"
 )
@@ -33,31 +35,22 @@ func (s *DbSource) UseConnection(f func(*sqlx.DB) error) error {
 	return f(db)
 }
 
-//func (s *DbSource) UseTransaction(f func(*sqlx.Tx) error) error {
-//	db, err := sqlx.Open(s.DriverName, s.DataSourceName)
-//
-//	if err != nil {
-//		core_utils.LogError("open db error:%s", err.Error())
-//		return err
-//	}
-//
-//	defer db.Close()
-//
-//	tx, err := db.Beginx()
-//
-//	if err != nil {
-//		core_utils.LogError("open db tx error:%s", err.Error())
-//		return err
-//	}
-//
-//	err = f(tx)
-//
-//	if err != nil {
-//		tx.Rollback()
-//		return err
-//	}
-//
-//	tx.Commit()
-//
-//	return nil
-//}
+func (s *DbSource) UseTransaction(db *sqlx.DB, opts *sql.TxOptions, f func(*sqlx.Tx) error) error {
+	tx, err := db.BeginTxx(context.Background(), opts)
+
+	if err != nil {
+		core_utils.LogError("open db tx error:%s", err.Error())
+		return err
+	}
+
+	err = f(tx)
+
+	if err != nil {
+		_ = tx.Rollback()
+		return err
+	}
+
+	_ = tx.Commit()
+
+	return nil
+}
