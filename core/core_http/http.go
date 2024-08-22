@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"crypto/tls"
 	"github.com/bytedance/sonic"
-	"github.com/junyuim/ailgo/core/core_utils"
 	"io"
+	"log/slog"
 	"net/http"
 	"time"
 )
@@ -35,7 +35,7 @@ func NewHttpRequest(method string, url string, body any, option *HttpRequestOpti
 		data, err := sonic.Marshal(body)
 
 		if err != nil {
-			core_utils.LogError("NewHttpRequest error:%s", err.Error())
+			slog.Error("NewHttpRequest", "err", err.Error())
 			return nil
 		}
 
@@ -45,7 +45,7 @@ func NewHttpRequest(method string, url string, body any, option *HttpRequestOpti
 	req, err := http.NewRequest(method, url, bodyReader)
 
 	if err != nil {
-		core_utils.LogError("NewHttpRequest error:%s", err.Error())
+		slog.Error("NewHttpRequest", "err", err.Error())
 		return nil
 	}
 

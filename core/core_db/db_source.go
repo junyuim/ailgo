@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/jmoiron/sqlx"
-	"github.com/junyuim/ailgo/core/core_utils"
+	"log/slog"
 )
 
 type DbSource struct {
@@ -16,7 +16,7 @@ func (s *DbSource) OpenConnection() (*sqlx.DB, error) {
 	db, err := sqlx.Open(s.DriverName, s.DataSourceName)
 
 	if err != nil {
-		core_utils.LogError("open connection error:%s", err.Error())
+		slog.Error("open db conn", "err", err.Error())
 	}
 
 	return db, err
@@ -26,7 +26,7 @@ func (s *DbSource) UseConnection(f func(*sqlx.DB) error) error {
 	db, err := sqlx.Open(s.DriverName, s.DataSourceName)
 
 	if err != nil {
-		core_utils.LogError("open connection error:%s", err.Error())
+		slog.Error("open db conn", "err", err.Error())
 		return err
 	}
 
@@ -39,7 +39,7 @@ func (s *DbSource) UseTransaction(db *sqlx.DB, opts *sql.TxOptions, f func(*sqlx
 	tx, err := db.BeginTxx(context.Background(), opts)
 
 	if err != nil {
-		core_utils.LogError("open db tx error:%s", err.Error())
+		slog.Error("open db tx", "err", err.Error())
 		return err
 	}
 

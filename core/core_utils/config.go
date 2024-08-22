@@ -3,6 +3,7 @@ package core_utils
 import (
 	"encoding/json"
 	"gopkg.in/yaml.v3"
+	"log/slog"
 	"os"
 	"path/filepath"
 )
@@ -34,7 +35,7 @@ func LoadJsonFile(path string, out any) error {
 	file, err := os.ReadFile(path)
 
 	if err != nil {
-		LogError("LoadJsonFile:%s", err.Error())
+		slog.Error("load json file", "err", err.Error())
 		return err
 	}
 
@@ -45,7 +46,7 @@ func SaveJsonFile(path string, out any) error {
 	bytes, err := json.MarshalIndent(out, "", "  ")
 
 	if err != nil {
-		LogError("SaveJsonFile:%s", err.Error())
+		slog.Error("save json file", "err", err.Error())
 		return err
 	}
 
